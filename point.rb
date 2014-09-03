@@ -11,6 +11,10 @@ class Point
     @@uptrend = dir == :up
   end
 
+  def uptrend?
+    @trend == :up
+  end
+
   def uptrend
     trend :up
   end
@@ -24,6 +28,6 @@ class Point
   end
 
   def to_s
-    "#{date}: #{mov_avg_20d}, #{mov_avg_50d}"
+    "#{date}: #{px_high} #{mov_avg_20d}, #{mov_avg_50d}"
   end
 end
