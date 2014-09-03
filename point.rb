@@ -2,7 +2,8 @@ class Point
   attr_accessor :date, :px_open, :px_last, :px_high, :px_low, :rsi_14d, :mov_avg_20d, :mov_avg_50d
 
   def initialize row
-    @date, @px_open, @px_last, @px_high, @px_low, @rsi_14d, @mov_avg_20d, @mov_avg_50d = row
+    @date, *numbers = row
+    @px_open, @px_last, @px_high, @px_low, @rsi_14d, @mov_avg_20d, @mov_avg_50d = numbers.map(&:to_f)
     @@uptrend = false
   end
 
