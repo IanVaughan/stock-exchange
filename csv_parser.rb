@@ -8,6 +8,6 @@ class CsvParser
           points << Point.new(row)
         end
       end
-    end
+    end.sort_by { |p| p.date }
   end
 end
