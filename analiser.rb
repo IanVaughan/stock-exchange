@@ -20,7 +20,7 @@ class Analiser
         puts "Uptrend: #{p}"
       end
 
-      if Point.uptrend? && p.mov_avg_20d < p.mov_avg_50d
+      if p.mov_avg_20d < p.mov_avg_50d
         p.downtrend
         puts "Downtrend: #{p}"
       end

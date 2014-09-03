@@ -5,7 +5,6 @@ class Point
     raw_date, *raw_numbers = raw_row
     @date = extract_date(raw_date)
     @px_open, @px_last, @px_high, @px_low, @rsi_14d, @mov_avg_20d, @mov_avg_50d = raw_numbers.map(&:to_f)
-    @@uptrend = false
   end
 
   def extract_date raw_date
@@ -15,7 +14,6 @@ class Point
 
   def trend dir
     @trend = dir
-    @@uptrend = dir == :up
   end
 
   def uptrend?
@@ -30,11 +28,7 @@ class Point
     trend :down
   end
 
-  def self.uptrend?
-    @@uptrend
-  end
-
   def to_s
-    "#{date}: #{px_high} #{mov_avg_20d}, #{mov_avg_50d}"
+    "#{date}: #{mov_avg_20d}, #{mov_avg_50d}"
   end
 end
