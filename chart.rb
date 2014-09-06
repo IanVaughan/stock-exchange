@@ -3,33 +3,34 @@ require 'gruff'
 class Chart
   attr_reader :graph
 
-  def initialize
-  end
-
-  def line(title: nil, size: Gruff::Base::DEFAULT_TARGET_WIDTH)
-    @graph = Gruff::Line.new(size)
+  def initialize(type: :line, title: nil, size: Gruff::Base::DEFAULT_TARGET_WIDTH)
     title(title) unless title.nil?
-    self
+    create(:line, size)
   end
 
-  def title text
+  def title(text)
     graph.title = text
-    self
   end
 
-  def labels _labels
-    graph.labels = {}.tap { |h| _labels.each_with_index { |l,i| h[i] = l } }
-    self
+  def labels(_labels, _number_of_points = _labels.count)
+    graph.labels = create_labels(_labels)
   end
 
   # g.data :Jimmy, [25, 36, 86, 39, 25, 31, 79, 88]
-  def data _label, _data
-    graph.data _label, _data
-    self
+  # g.write('exciting.png')
+  def method_missing(meth, *args, &block)
+    graph.public_send(meth, *args)
   end
 
-  # g.write('exciting.png')
-  def create name
-    graph.write(name)
+  private
+
+  def create(type, size)
+    @graph = Gruff::Line.new(size)
+  end
+
+  def create_labels(_labels)
+    {}.tap do |hash|
+      _labels.each_with_index { |label, i| hash[i] = label }
+    end
   end
 end
