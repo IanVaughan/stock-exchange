@@ -1,39 +1,48 @@
 class Analiser
+  attr_reader :points, :start_point, :end_point
+
   def self.analysis(points)
-    action = self.new(points)
-    action.trends
-    action.vibrations
+    self.new(points).run
   end
 
   def initialize(points)
     @points = points
   end
 
-  attr_reader :points
+  def run
+    points.each_with_index { |p, i| analise(p, i) }
+  end
 
-  def trends
-    points.each do |p|
-      # uptrend: 20 day moving average crossing above 50 day moving average
-      # downtrend: 20 day crossing below the 50 day
-      if p.mov_avg_20d > p.mov_avg_50d
-        p.uptrend
-        puts "Uptrend: #{p}"
-      end
+  def analise(p, i)
+    # start point : 20ma crosses 50ma
+    # also moves start point
+    find_start_point(p)
+    find_end_point(p, i) if start_point
+  end
 
-      if p.mov_avg_20d < p.mov_avg_50d
-        p.downtrend
-        puts "Downtrend: #{p}"
-      end
+  def find_start_point(p)
+    if p.mov_avg_20d > p.mov_avg_50d
+      p.uptrend
+      @start_point = p
+    end
+
+    p.downtrend if p.mov_avg_20d < p.mov_avg_50d
+  end
+
+  def find_end_point(p, i)
+    if p.px_high > start_point.px_high
+      @end_point = p
+      dump_data(i)
     end
   end
 
-  # Identify the vibration / frequency of each trend
-  # by measuring the price vs time gradient across the high prices or low prices.
-  # i.e. in an uptrend the gradient should be measured across the two highest highs
-  # that creates the lowest gradient trend / vibration
-  def vibrations
-    trends = points.chunk {|p| p.uptrend?}.to_a
-    trends.first.last.sort_by! {|p| p.px_high}
-    puts trends.first.last[-2..-1]
+  def dump_data(i)
+    return
+    chart = Chart.new(type: :line, size: 10000)
+    %i{ mov_avg_20d mov_avg_50d px_high }.each do |p|
+      chart.data(p, points[0..i].map(&p))
+    end
+    chart.data('start_end', [start_point.px_high, end_point.px_high])
+    chart.write("#{i}-bob.png")
   end
 end
