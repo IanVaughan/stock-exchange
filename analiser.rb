@@ -36,18 +36,22 @@ class Analiser
   def find_end_point(p)
     if p.px_high > start_point.px_high && p.px_high > end_point.px_high
       @end_point = p
+      last_trend = @current_trend
       @current_trend = trend_line
+      chart_trend(last_trend, @current_trend)
     end
   end
 
-  def chart_trend(line)
+  def chart_trend(last, line)
     chart = Chart.new
+    chart.labels(points.first(line.count).map { |p| p.date.to_s }, 4)
     %i{ mov_avg_20d mov_avg_50d px_high }.each do |plot|
-      chart.data(plot, points[0..p.position].map(&plot))
+      chart.data(plot, points.first(line.count).map(&plot))
     end
-    chart.data('start_end',line)
+    chart.data('last', last)
+    chart.data('start_end', line)
     #chart.data('up', points.map { |p| p.uptrend? ? p.mov_avg_20d : nil })
-    chart.write("output/#{p.position}-bob.png")
+    chart.write("output/#{line.count}.png")
   end
 
   def trend_line

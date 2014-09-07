@@ -14,7 +14,7 @@ class Chart
   end
 
   def labels(_labels, _number_of_points = _labels.count)
-    graph.labels = create_labels(_labels)
+    graph.labels = create_labels(_labels, _number_of_points)
   end
 
   # g.data :Jimmy, [25, 36, 86, 39, 25, 31, 79, 88]
@@ -29,9 +29,17 @@ class Chart
     @graph = Gruff::Line.new(size)
   end
 
-  def create_labels(_labels)
+  def create_labels(_labels, _number_of_points)
+    space = (_labels.count-2) / _number_of_points
     {}.tap do |hash|
-      _labels.each_with_index { |label, i| hash[i] = label }
+      hash[0] = _labels.first
+      _labels[0.._labels.count-1].each_with_index do |label, index|
+        if index > space && index < _labels.count
+          hash[index] = label
+          space += space
+        end
+      end
+      hash[_labels.count-1] = _labels.last
     end
   end
 end
