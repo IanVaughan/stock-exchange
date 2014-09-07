@@ -40,3 +40,4 @@ end
 
 chart.write('bob.png')
 `open bob.png`
+`convert -delay 4 output/*.png output/output.gif`
