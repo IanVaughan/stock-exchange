@@ -2,13 +2,18 @@ require 'csv'
 
 class CsvParser
   def self.parse(filename)
-    [].tap do |points|
+    points = [].tap do |points|
       CSV.foreach(filename) do |row|
         unless row.any? {|r| r == '#N/A'}
           points << Point.new(extract_data(row))
         end
       end
     end.sort_by { |p| p.date }
+
+    position = 0
+    points.each do |p|
+      p.position = position += 1
+    end
   end
 
   def self.extract_data(raw_row)

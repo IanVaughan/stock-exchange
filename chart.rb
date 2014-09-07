@@ -4,8 +4,9 @@ class Chart
   attr_reader :graph
 
   def initialize(type: :line, title: nil, size: Gruff::Base::DEFAULT_TARGET_WIDTH)
-    title(title) unless title.nil?
     create(:line, size)
+    title(title) unless title.nil?
+    graph.hide_dots = true
   end
 
   def title(text)

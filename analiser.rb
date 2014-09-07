@@ -1,48 +1,66 @@
 class Analiser
-  attr_reader :points, :start_point, :end_point
-
-  def self.analysis(points)
-    self.new(points).run
-  end
+  attr_reader :points, :start_point, :end_point, :best_trends
 
   def initialize(points)
     @points = points
+    @end_point = points.first
+    @trends = @best_trends = []
   end
 
   def run
-    points.each_with_index { |p, i| analise(p, i) }
+    points.each { |p| analise(p) }
   end
 
-  def analise(p, i)
-    # start point : 20ma crosses 50ma
-    # also moves start point
+  def analise(p)
     find_start_point(p)
-    find_end_point(p, i) if start_point
+    find_end_point(p)
   end
 
   def find_start_point(p)
+    # start point : 20ma crosses 50ma
+    # also moves start point
     if p.mov_avg_20d > p.mov_avg_50d
       p.uptrend
-      @start_point = p
     end
 
-    p.downtrend if p.mov_avg_20d < p.mov_avg_50d
+    if p.mov_avg_20d < p.mov_avg_50d
+      p.downtrend
+      @end_point = @start_point = p
+      if @current_trend
+        @best_trends << @current_trend
+        @current_trend = nil
+      end
+    end
   end
 
-  def find_end_point(p, i)
-    if p.px_high > start_point.px_high
+  def find_end_point(p)
+    if p.px_high > start_point.px_high && p.px_high > end_point.px_high
       @end_point = p
-      dump_data(i)
+      @current_trend = trend_line
     end
   end
 
-  def dump_data(i)
-    return
-    chart = Chart.new(type: :line, size: 10000)
-    %i{ mov_avg_20d mov_avg_50d px_high }.each do |p|
-      chart.data(p, points[0..i].map(&p))
+  def chart_trend(line)
+    chart = Chart.new
+    %i{ mov_avg_20d mov_avg_50d px_high }.each do |plot|
+      chart.data(plot, points[0..p.position].map(&plot))
     end
-    chart.data('start_end', [start_point.px_high, end_point.px_high])
-    chart.write("#{i}-bob.png")
+    chart.data('start_end',line)
+    #chart.data('up', points.map { |p| p.uptrend? ? p.mov_avg_20d : nil })
+    chart.write("output/#{p.position}-bob.png")
+  end
+
+  def trend_line
+    [
+      [nil] * (start_point.position-1),
+      gradient,
+      end_point.px_high
+    ].flatten
+  end
+
+  def gradient
+    times = (end_point.position - start_point.position)
+    inc = (end_point.px_high - start_point.px_high) / times
+    [].tap {|a| times.times {|t| a << start_point.px_high + (inc * t) }}
   end
 end
