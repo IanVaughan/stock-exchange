@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 
-require './point'
-require './csv_parser'
-require './analiser'
-require './chart'
+require './lib/point'
+require './lib/csv_parser'
+require './lib/analiser'
+require './lib/chart'
 require 'pry'
 
 START_POINT = 0
 END_POINT = 500
 
-filename = 'sx5e_index.csv'
+filename = './data/sx5e_index.csv'
 points = CsvParser.parse(filename)
 
 points = points[START_POINT..END_POINT]
