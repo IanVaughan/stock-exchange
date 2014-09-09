@@ -15,12 +15,11 @@ points = CsvParser.parse(filename)
 points = points[START_POINT..END_POINT]
 
 analiser = Analiser.new(points)
-analiser.run
+trends = []
+analiser.run { |trend| trends << trend }
 
-#Chart.new.line.labels(['a','b','c']).data('Ian',[1,5,20]).create('bob.png')
 chart = Chart.new(type: :line, size: 1000)
-#chart.labels(points.map { |p| p.date.to_s })
-#chart.labels((1..points.length).map(&:to_s))
+chart.labels(points.map { |p| p.date.to_s }, 4)
 
   # px_open
   # px_last
@@ -34,8 +33,8 @@ chart = Chart.new(type: :line, size: 1000)
   chart.data(p, points.map(&p))
 end
 chart.data('up', points.map { |p| p.uptrend? ? p.mov_avg_20d : nil })
-analiser.best_trends.each_with_index do |t,i|
-  chart.data("trend-#{i}", t)
+trends.each_with_index do |t,i|
+  chart.data("trend-#{i}", Chart.create_trend_line(t.first, t.last))
 end
 
 chart.write('bob.png')
