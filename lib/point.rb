@@ -5,8 +5,16 @@ class Point
   @@count = 0
 
   def initialize data
-    @date, @px_open, @px_last, @px_high, @px_low, @rsi_14d, @mov_avg_20d, @mov_avg_50d = data
     @position = @@count += 1
+    if data.is_a? Array
+      @date, @px_open, @px_last, @px_high, @px_low, @rsi_14d, @mov_avg_20d, @mov_avg_50d = data
+    elsif data.is_a? Hash
+      data.each { |k,v| self.instance_variable_set("@#{k}", v) }
+    end
+  end
+
+  def self.reset_count
+    @@count = 0
   end
 
   def trend dir
@@ -18,16 +26,28 @@ class Point
   end
 
   def uptrend
-    puts "Uptrend : #{self}"
     trend :up
   end
 
   def downtrend
-    puts "Downtrend : #{self}"
     trend :down
   end
 
+  def latch
+    @latch = true
+  end
+
+  def latched?
+    @latch
+  end
+
   def to_s
-    "#{@position} - #{date}: #{mov_avg_20d}, #{mov_avg_50d}"
+    "#{@position} - #{date}: #{mov_avg_20d}, #{mov_avg_50d}, #{px_high}"
+  end
+
+  def to_h
+    {
+      position: @position,
+    }
   end
 end
