@@ -6,7 +6,7 @@ class CsvParser
 
     CSV.foreach(filename) do |row|
       unless row.any? { |r| r == '#N/A' }
-        points << Point.new(extract_data(row))
+        points << Sample.new(extract_data(row))
       end
     end
 

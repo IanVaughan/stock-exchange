@@ -30,7 +30,7 @@ class Chart
   end
 
   def create_labels(_labels, _number_of_points)
-    space = (_labels.count-2) / _number_of_points
+    space = (_labels.count-2) / (_number_of_points+1)
     {}.tap do |hash|
       hash[0] = _labels.first
       _labels[0.._labels.count-1].each_with_index do |label, index|
@@ -43,16 +43,19 @@ class Chart
     end
   end
 
-  def self.chart_trend(last, line)
+  def self.chart_trend(points, size, last_trend, current_trend)
     chart = Chart.new
-    chart.labels(points.first(line.count).map { |p| p.date.to_s }, 4)
+    chart.labels(points.first(size).map { |p| p.date.to_s }, 4)
     %i{ mov_avg_20d mov_avg_50d px_high }.each do |plot|
-      chart.data(plot, points.first(line.count).map(&plot))
+      chart.data(plot, points.first(size).map(&plot))
     end
-    chart.data('last', last)
-    chart.data('start_end', line)
+
+    last_trend_line = Chart.create_trend_line(last_trend.first, last_trend.last)
+    current_trend_line = Chart.create_trend_line(current_trend.first, current_trend.last)
+    chart.data('last_trend', last_trend_line)
+    chart.data('current_trend', current_trend_line)
     #chart.data('up', points.map { |p| p.uptrend? ? p.mov_avg_20d : nil })
-    chart.write("output/#{line.count}.png")
+    chart.write("output/#{size}.png")
   end
 
   def self.create_trend_line(p1, p2)

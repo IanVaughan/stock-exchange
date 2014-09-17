@@ -16,11 +16,19 @@ class Analiser
   def analise(p, &block)
     @p = p
 
-    if tracking? && found_start_point && found_end_point
-      update_start_point
-      @trend = [start_point, end_point]
+    if tracking?
+      if found_start_point? && found_end_point?
+        update_start_point
+        @trend = Trend.new(start_point, end_point)
+        @end_latched = false
+        yield @trend.to_a if block_given?
+      end
+    else
+      @start_latched = false
       @end_latched = false
-      yield @trend if block_given?
+      @start_point = nil
+      @end_point = nil
+      @trend = nil
     end
   end
 
@@ -28,25 +36,22 @@ class Analiser
     p.mov_avg_20d >= p.mov_avg_50d
   end
 
-  def found_start_point
+  def found_start_point?
     return true if @start_latched
 
-    @start_point ||= p
+    @start_point = p
+    @start_latched = true
 
-    if p.px_high >= start_point.px_high
-      @start_point = p
-    else
-      @start_latched = true
-    end
     return @start_latched
   end
 
-  def found_end_point
+  def found_end_point?
     return true if @end_latched
+    return false if p == start_point
 
     @end_point ||= p
 
-    if p.px_high >= start_point.px_high && p.px_high > end_point.px_high
+    if p.px_high >= start_point.px_high && p.px_high >= end_point.px_high
       @end_point = p
       @end_latched = true
     end
@@ -57,10 +62,12 @@ class Analiser
   def update_start_point
     return start_point if @trend.nil?
 
-    current_trend_diff = trend.last.px_high - trend.first.px_high
-    new_trend_diff = end_point.px_high - trend.last.px_high
-    if new_trend_diff < current_trend_diff
-      @start_point = trend.last
+    p1 = trend.diff
+    p2 = end_point - trend.end_point
+    t1 = Calculate.diff(p1, p2)
+
+    if t1 < -1.0
+      @start_point = trend.end_point
     end
   end
 end

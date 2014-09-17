@@ -1,38 +1,48 @@
 #!/usr/bin/env ruby
 
-require './lib/point'
+puts "Trend"
+
+require './lib/sample'
 require './lib/csv_parser'
 require './lib/analiser'
 require './lib/chart'
+require './lib/trend'
+require './lib/calculate'
+require './lib/point'
 require 'pry'
 
 START_POINT = 0
-END_POINT = 500
+END_POINT = 1000
+
+puts "Parsing csv input..."
 
 filename = './data/sx5e_index.csv'
 points = CsvParser.parse(filename)
 
 points = points[START_POINT..END_POINT]
 
-analiser = Analiser.new(points)
-trends = []
-analiser.run { |trend| trends << trend }
+puts "Analysing #{points.count} points..."
 
-chart = Chart.new(type: :line, size: 1000)
+analiser = Analiser.new(points)
+
+trends = []
+last_trend = nil
+analiser.run do |trend|
+  # trends << trend
+  pos = trend.last.position
+  Chart.chart_trend(points, pos, last_trend, trend) if last_trend
+  last_trend = trend
+end
+
+puts "Creating chart..."
+
+chart = Chart.new(type: :line, size: 5000)
 chart.labels(points.map { |p| p.date.to_s }, 4)
 
-  # px_open
-  # px_last
-  # px_low
-  # rsi_14d
-%i{
-  mov_avg_20d
-  mov_avg_50d
-  px_high
-}.each do |p|
+%i{ mov_avg_20d mov_avg_50d px_high }.each do |p|
   chart.data(p, points.map(&p))
 end
-chart.data('up', points.map { |p| p.uptrend? ? p.mov_avg_20d : nil })
+
 trends.each_with_index do |t,i|
   chart.data("trend-#{i}", Chart.create_trend_line(t.first, t.last))
 end

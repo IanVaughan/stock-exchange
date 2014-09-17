@@ -3,56 +3,101 @@ require 'spec_helper'
 describe Analiser do
   subject { described_class.new(load_test_input.first(count)) }
 
-  context 'no yield' do
+  let(:start_point) { subject.points[startp-1] }
+  let(:end_point) { subject.points[endp-1] }
+
+  context 'not yielding' do
     before { subject.run }
 
-    context 'finding the start point' do
-      let(:count) { 10 }
-      let(:start_point) { subject.points[4] }
-      it { expect(subject.start_point).to eq(start_point) }
+    context 'tracking the start point (p1)' do
+      COUNT_START_POSITION = {
+        5 => 4,
+        6 => 4,
+        7 => 5,
+        8 => 5,
+        10 => 5,
+        12 => 5,
+        14 => 5,
+        15 => 7,
+        16 => 7,
+        17 => 7,
+        18 => 7,
+      }
+
+      COUNT_START_POSITION.each do |c, p|
+        context "with the first #{c} points" do
+          let(:count) { c }
+          it { expect(subject.start_point).to eq(subject.points[p-1]) }
+        end
+      end
     end
 
-    context 'finding the end point' do
-      let(:count) { 10 }
-      let(:end_point) { subject.points[6] }
-      it { expect(subject.end_point).to eq(end_point) }
+    context 'tracking the end point (p2)' do
+      COUNT_END_POSITION = {
+        5 => 5,
+        6 => 5,
+        7 => 7,
+        8 => 7,
+        14 => 7,
+        15 => 15,
+        16 => 15,
+        17 => 17,
+        18 => 17,
+      }
+
+      COUNT_END_POSITION.each do |c, p|
+        context "with the first #{c} points" do
+          let(:count) { c }
+          it { expect(subject.end_point).to eq(subject.points[p-1]) }
+        end
+      end
     end
 
-    context 'creates T1' do
-      let(:count) { 10 }
-      let(:start_point) { subject.points[4] }
-      let(:end_point) { subject.points[6] }
-      it { expect(subject.trend).to eq([start_point, end_point]) }
-    end
+    context 'trends' do
+      TREND_COUNT_START_END = {
+         6 => [4, 5], # T1
+         10 => [5, 7], # T2
+         15 => [7, 15], # T3
+         18 => [7, 17], # T4
+         # 20d ma dropped
+         21 => [20, 21], # AB
+         22 => [20, 22], # AC
+      }
 
-    context 'creates T2' do
-      let(:count) { 15 }
-      let(:start_point) { subject.points[6] }
-      let(:end_point) { subject.points[14] }
-      it { expect(subject.trend).to eq([start_point, end_point]) }
-    end
-
-    context 'creates T3' do
-      let(:count) { 20 }
-      let(:start_point) { subject.points[6] }
-      let(:end_point) { subject.points[16] }
-      it { expect(subject.trend).to eq([start_point, end_point]) }
+      TREND_COUNT_START_END.each do |c, p|
+        context "At position #{c} it creates a trend line between points #{p.first} and #{p.last}" do
+          let(:count) { c }
+          let(:startp) { p.first }
+          let(:endp) { p.last }
+          it { expect(subject.trend.to_a).to eq([start_point, end_point]) }
+        end
+      end
     end
   end
 
-  context 'yield' do
+  context 'yielding trends' do
     context 'yields each trend' do
-      let(:count) { 20 }
-      let(:t1) { [subject.points[4], subject.points[6]] }
-      let(:t2) { [subject.points[6], subject.points[14]] }
-      let(:t3) { [subject.points[6], subject.points[16]] }
+      let(:count) { 7 }
 
       it 'yields each trend' do
-        expect { |b| subject.run(&b) }.to yield_control.exactly(3).times
+        expect { |b| subject.run(&b) }.to yield_control.exactly(2).times
+      end
+
+      def point(x)
+        subject.points[x-1]
+      end
+
+      let(:trends) do
+        [
+          Trend.new(point(4), point(5)).to_a,
+          Trend.new(point(5), point(7)).to_a,
+          Trend.new(point(7), point(15)).to_a,
+          Trend.new(point(7), point(17)).to_a,
+        ]
       end
 
       it 'yields the trends' do
-        expect { |b| subject.run(&b) }.to yield_successive_args(t1, t2, t3)
+        expect { |b| subject.run(&b) }.to yield_successive_args(trends[0], trends[1])
       end
     end
   end
