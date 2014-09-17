@@ -13,15 +13,15 @@ describe Analiser do
       COUNT_START_POSITION = {
         5 => 4,
         6 => 4,
-        7 => 5,
-        8 => 5,
-        10 => 5,
-        12 => 5,
-        14 => 5,
-        15 => 7,
-        16 => 7,
-        17 => 7,
-        18 => 7,
+        7 => 4,
+        8 => 4,
+        10 => 4,
+        12 => 4,
+        14 => 4,
+        15 => 4,
+        16 => 4,
+        17 => 4,
+        18 => 4,
       }
 
       COUNT_START_POSITION.each do |c, p|
@@ -56,9 +56,9 @@ describe Analiser do
     context 'trends' do
       TREND_COUNT_START_END = {
          6 => [4, 5], # T1
-         10 => [5, 7], # T2
-         15 => [7, 15], # T3
-         18 => [7, 17], # T4
+         10 => [4, 7], # T2
+         15 => [4, 15], # T3
+         18 => [4, 17], # T4
          # 20d ma dropped
          21 => [20, 21], # AB
          22 => [20, 22], # AC
@@ -77,27 +77,20 @@ describe Analiser do
 
   context 'yielding trends' do
     context 'yields each trend' do
-      let(:count) { 7 }
+      let(:count) { 19 }
 
       it 'yields each trend' do
-        expect { |b| subject.run(&b) }.to yield_control.exactly(2).times
+        expect { |b| subject.run(&b) }.to yield_control.exactly(1).times
       end
 
       def point(x)
         subject.points[x-1]
       end
 
-      let(:trends) do
-        [
-          Trend.new(point(4), point(5)).to_a,
-          Trend.new(point(5), point(7)).to_a,
-          Trend.new(point(7), point(15)).to_a,
-          Trend.new(point(7), point(17)).to_a,
-        ]
-      end
+      let(:trend) { Trend.new(point(4), point(17)).to_a }
 
       it 'yields the trends' do
-        expect { |b| subject.run(&b) }.to yield_successive_args(trends[0], trends[1])
+        expect { |b| subject.run(&b) }.to yield_successive_args(trend)
       end
     end
   end

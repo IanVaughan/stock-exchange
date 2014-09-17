@@ -28,7 +28,7 @@ analiser = Analiser.new(points)
 trends = []
 last_trend = nil
 analiser.run do |trend|
-  # trends << trend
+  trends << trend
   pos = trend.last.position
   Chart.chart_trend(points, pos, last_trend, trend) if last_trend
   last_trend = trend

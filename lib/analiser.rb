@@ -18,12 +18,14 @@ class Analiser
 
     if tracking?
       if found_start_point? && found_end_point?
-        update_start_point
         @trend = Trend.new(start_point, end_point)
         @end_latched = false
-        yield @trend.to_a if block_given?
       end
     else
+      if @trend && @start_latched
+        yield @trend.to_a if block_given?
+      end
+
       @start_latched = false
       @end_latched = false
       @start_point = nil
