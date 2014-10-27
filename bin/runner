@@ -26,12 +26,14 @@ puts "Analysing #{points.count} points..."
 analiser = Analiser.new(points)
 
 trends = []
+low_points = []
 last_trend = nil
 analiser.run do |trend|
-  trends << trend
+  trends << trend.first
+  low_points << trend.last
   pos = trend.last.position
-  Chart.chart_trend(points, pos, last_trend, trend) if last_trend
-  last_trend = trend
+  Chart.chart_trend(points, pos, last_trend, trend.first) if last_trend
+  last_trend = trend.first
 end
 
 puts "Creating chart..."
@@ -43,8 +45,13 @@ chart.labels(points.map { |p| p.date.to_s }, 4)
   chart.data(p, points.map(&p))
 end
 
-trends.each_with_index do |t,i|
-  chart.data("trend-#{i}", Chart.create_trend_line(t.first, t.last))
+trends.each_with_index do |trend_line, i|
+  chart.data("trend-#{i}", Chart.create_trend_line(trend_line.first, trend_line.last))
+
+  x = (low_points[i].position - trend_line.first.position) + trend_line.last.position
+  y = (low_points[i].px_high - trend_line.first.px_high) + trend_line.last.px_high
+  last = Sample.new(position: x, px_high: y)
+  chart.data("lt#{i}", Chart.create_trend_line(low_points[i], last))
 end
 
 chart.write('bob.png')

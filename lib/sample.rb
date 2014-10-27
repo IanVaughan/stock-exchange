@@ -61,4 +61,16 @@ class Sample
       self.px_high - other.px_high
     )
   end
+
+  def <(other)
+    self.px_high < other.px_high
+  end
+
+  def >(other)
+    self.px_high > other.px_high
+  end
+
+  def >=(other)
+    self.px_high >= other.px_high
+  end
 end

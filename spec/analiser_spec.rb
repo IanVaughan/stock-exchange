@@ -53,6 +53,22 @@ describe Analiser do
       end
     end
 
+    context 'finding the lower point' do
+      COUNT_LOWER_POSITION = {
+        6 => 6,
+        11 => 9,
+        15 => 13,
+        22 => 13,
+      }
+
+      COUNT_LOWER_POSITION.each do |c, p|
+        context "with the first #{c} points" do
+          let(:count) { c }
+          it { expect(subject.low_point).to eq(subject.points[p-1]) }
+        end
+      end
+    end
+
     context 'trends' do
       TREND_COUNT_START_END = {
          6 => [4, 5], # T1

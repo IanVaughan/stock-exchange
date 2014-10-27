@@ -60,15 +60,15 @@ class Chart
 
   def self.create_trend_line(p1, p2)
     [
-      [nil] * (p1.position-1),
+      [nil] * (p1.position - 1),
       plot_gradient(p1, p2),
       p2.px_high
     ].flatten
   end
 
   def self.plot_gradient(p1, p2)
-    times = (p2.position - p1.position)
-    inc = (p2.px_high - p1.px_high) / times
-    [].tap {|a| times.times {|t| a << p1.px_high + (inc * t) }}
+    length = (p2.position - p1.position)
+    height = (p2.px_high - p1.px_high) / length
+    [].tap {|a| length.times {|t| a << p1.px_high + (height * t) }}
   end
 end
