@@ -49,6 +49,14 @@ class Sample
     "#{@position} - #{date}: 20d:#{mov_avg_20d}, 50d:#{mov_avg_50d}, px_high:#{px_high}"
   end
 
+  def to_chart
+    [
+      date.to_time.to_i*1000,
+      px_high,
+      px_low
+    ]
+  end
+
   def to_h
     {
       position: @position,

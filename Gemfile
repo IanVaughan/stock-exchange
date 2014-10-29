@@ -1,4 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'gruff'
-gem 'rspec'
+gem 'sinatra'
+
+group :test, :development do
+  gem 'rspec'
+  gem 'pry'
+end
