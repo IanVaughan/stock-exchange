@@ -1,4 +1,6 @@
 class Sample
+  include Comparable
+
   attr_reader :date, :px_open, :px_last, :px_high, :px_low, :rsi_14d, :mov_avg_20d, :mov_avg_50d
   attr_accessor :position
 
@@ -17,41 +19,9 @@ class Sample
     @@count = 0
   end
 
-  def trend dir
-    @trend = dir
-  end
-
-  def uptrend?
-    @trend == :up
-  end
-
-  def downtrend?
-    @trend == :up
-  end
-
-  def uptrend
-    trend :up
-  end
-
-  def downtrend
-    trend :down
-  end
-
-  def latch
-    @latch = true
-  end
-
-  def latched?
-    @latch
-  end
-
-  def to_s
-    "#{@position} - #{date}: 20d:#{mov_avg_20d}, 50d:#{mov_avg_50d}, px_high:#{px_high}"
-  end
-
   def to_chart
     [
-      date.to_time.to_i*1000,
+      date.to_time.to_i * 1000,
       px_high,
       px_low
     ]
@@ -70,15 +40,7 @@ class Sample
     )
   end
 
-  def <(other)
-    self.px_high < other.px_high
-  end
-
-  def >(other)
-    self.px_high > other.px_high
-  end
-
-  def >=(other)
-    self.px_high >= other.px_high
+  def <=>(other)
+    self.px_high <=> other.px_high
   end
 end
