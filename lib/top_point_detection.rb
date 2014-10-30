@@ -5,9 +5,10 @@ class TopPointDetection
     @points = points
   end
 
-  def run(window_width)
-    @high_points = []
+  def run(window_width, give_up_after)
     @window_width = window_width
+    @give_up_after = give_up_after
+    @high_points = []
     points.each { |p| analise(p) }
   end
 
@@ -34,8 +35,8 @@ class TopPointDetection
     end
 
     # Give up finding higher point after a while
-    # if (p.position - @high_point.position) >= 50 #give_up_after
-    #   @high_point = nil
-    # end
+    if @high_point && (p.position - @high_point.position) >= @give_up_after
+      @high_point = nil
+    end
   end
 end

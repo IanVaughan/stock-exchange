@@ -2,12 +2,13 @@ require 'spec_helper'
 
 describe TopPointDetection do
   let(:number_of_points) { 0 }
-  let(:window) { 2 }
+  let(:window_width) { 2 }
+  let(:give_up_after) { 10 }
   let(:data) { load_test_input.first(number_of_points) }
   subject { described_class.new(data) }
 
   context 'top point detection' do
-    before { subject.run(window) }
+    before { subject.run(window_width, give_up_after) }
 
     context 'finds top points' do
       COUNT_START_POSITION = {
