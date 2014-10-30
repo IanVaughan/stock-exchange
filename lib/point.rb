@@ -5,14 +5,6 @@ class Point
     @x, @y = x, y
   end
 
-  def first
-    x
-  end
-
-  def last
-    y
-  end
-
   def to_s
     "x:#{x}, y:#{y}"
   end

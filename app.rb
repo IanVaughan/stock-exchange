@@ -1,10 +1,14 @@
 require 'sinatra'
-require './lib/csv_parser'
-require './lib/sample'
-require 'pry'
+require './lib/shares'
 
 get '/' do
-  data = CsvParser.parse('data/sx5e_index.csv')
-  samples = data
-  erb :index, locals: { samples: samples.map(&:to_chart) }
+  filename = './data/sx5e_index.csv'
+  points = CsvParser.parse(filename)
+  # points = points[0..200]
+  top_points = TopPointDetection.new(points)
+  top_points.run(4)
+  erb :index, locals: {
+    samples: points.map(&:to_chart),
+    top_points: top_points.high_points.map(&:to_chart)
+  }
 end

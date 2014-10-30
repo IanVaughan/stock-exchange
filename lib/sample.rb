@@ -1,6 +1,4 @@
 class Sample
-  include Comparable
-
   attr_reader :date, :px_open, :px_last, :px_high, :px_low, :rsi_14d, :mov_avg_20d, :mov_avg_50d
   attr_accessor :position
 
@@ -17,6 +15,10 @@ class Sample
 
   def self.reset_count
     @@count = 0
+  end
+
+  def inspect
+    [position, date.to_s, px_high]
   end
 
   def to_chart
@@ -38,9 +40,5 @@ class Sample
       self.position - other.position,
       self.px_high - other.px_high
     )
-  end
-
-  def <=>(other)
-    self.px_high <=> other.px_high
   end
 end

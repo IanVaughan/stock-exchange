@@ -1,9 +1,9 @@
-require './lib/sample'
-require './lib/csv_parser'
 require './lib/analiser'
-require './lib/chart'
 require './lib/calculate'
+require './lib/csv_parser'
 require './lib/point'
+require './lib/sample'
+require './lib/top_point_detection.rb'
 require './lib/trend'
 require 'pry'
 
@@ -15,9 +15,7 @@ def load_test_input(filename = './spec/test.csv')
       next if row.first == "Sample"
       data = {
         date: Date.today+points.count,
-        mov_avg_20d: row[1].to_i,
-        mov_avg_50d: row[2].to_i,
-        px_high: row[3].to_i
+        px_high: row[1].to_i
       }
       points << Sample.new(data)
     end
