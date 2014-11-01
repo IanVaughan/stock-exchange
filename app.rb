@@ -25,7 +25,8 @@ class App < Sinatra::Application
 
     ww = (params['window_width'] || 40).to_i
     gua = (params['give_up_after'] || 50).to_i
-    tops = top_points(points, ww, gua)
+    cc = 3
+    tops = top_points(points, ww, gua, cc)
 
     erb :graph, locals: {
       window_width: ww,
@@ -44,11 +45,23 @@ def load_data
   session[:points] = CsvParser.parse(filename)
 end
 
-def top_points(points, window_width, give_up_after)
+def top_points(points, window_width, give_up_after, collection_count)
   tpd = TopPointDetection.new(points)
-  tpd.run(window_width, give_up_after)
+  tpd.run(window_width, give_up_after, collection_count)
+
   points = tpd.high_points.map(&:to_chart)
   points.map do |t|
     { x: t[0], title: 'A' }
   end.to_json
+
+  collections = tpd.collections.each_with_index.flat_map do |collection, ci|
+    collection.each_with_index.map do |sample, si|
+      {
+        x: sample.chart_date,
+        title: "#{ci}:#{si}"
+      }
+    end
+  end
+
+  collections.to_json
 end

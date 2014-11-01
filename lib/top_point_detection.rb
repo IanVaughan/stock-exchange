@@ -35,7 +35,7 @@ class TopPointDetection
       @collection << high_point
       @new_high = false
 
-      if @high_points.count % collection_count == 0
+      if collection.count % collection_count == 0
         @collections << collection
         @collection = []
         @high_point = nil

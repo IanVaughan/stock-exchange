@@ -23,10 +23,14 @@ class Sample
 
   def to_chart
     [
-      date.to_time.to_i * 1000,
+      chart_date,
       px_high,
       px_low
     ]
+  end
+
+  def chart_date
+    date.to_time.to_i * 1000
   end
 
   def to_h
