@@ -45,6 +45,7 @@ class TopPointDetection
     # Give up finding higher point after a while
     if @high_point && (p.position - @high_point.position) >= @give_up_after
       @high_point = nil
+      @collections << collection
       @collection = []
     end
   end

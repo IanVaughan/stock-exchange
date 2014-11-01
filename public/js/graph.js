@@ -24,9 +24,9 @@ $(function () {
       id : 'dataseries'
     }, {
       type : 'flags',
-      data : $('#container').data('tops'),
+      data : $('#container').data('collections'),
       onSeries : 'dataseries',
-      shape : 'circlepin',
+      shape : 'squarepin',
       width : 16
     }]
   });
