@@ -1,5 +1,6 @@
 class TopPointDetection
-  attr_reader :high_points
+  attr_reader :high_points, :collections
+  attr_reader :window_width, :give_up_after, :collection_count
 
   def initialize(points)
     @points = points
