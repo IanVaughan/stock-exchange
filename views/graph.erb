@@ -1,0 +1,20 @@
+<script src="js/graph.js"></script>
+
+<form action="/graph" method="get">
+  <input title="Window width"
+         name="window_width"
+         type="text"
+         value="<%= window_width %>"/>
+  <input title="Give up after"
+         name="give_up_after"
+         type="text"
+         value="<%= give_up_after %>"/>
+  <input type="submit" value="Submit" />
+</form>
+
+<div  id="container"
+      style="height: 400px; min-width: 600px"
+      data-points="<%= samples %>"
+      data-tops="<%= tops %>">
+  Loading...
+</div>
