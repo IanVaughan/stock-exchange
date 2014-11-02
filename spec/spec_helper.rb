@@ -1,6 +1,7 @@
 require './lib/analiser'
 require './lib/calculate'
 require './lib/csv_parser'
+require './lib/gann_angle'
 require './lib/point'
 require './lib/sample'
 require './lib/top_point_detection'
