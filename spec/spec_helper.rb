@@ -3,7 +3,7 @@ require './lib/calculate'
 require './lib/csv_parser'
 require './lib/point'
 require './lib/sample'
-require './lib/top_point_detection.rb'
+require './lib/top_point_detection'
 require './lib/trend'
 require 'pry'
 
