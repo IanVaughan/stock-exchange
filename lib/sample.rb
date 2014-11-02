@@ -1,5 +1,6 @@
 class Sample
-  attr_reader :date, :px_open, :px_last, :px_high, :px_low, :rsi_14d, :mov_avg_20d, :mov_avg_50d
+  attr_reader :date, :px_open, :px_last, :px_high, :px_low
+  attr_reader :rsi_14d, :mov_avg_20d, :mov_avg_50d
   attr_accessor :position
 
   @@count = 0
@@ -17,10 +18,6 @@ class Sample
     @@count = 0
   end
 
-  def inspect
-    [position, date.to_s, px_high]
-  end
-
   def to_chart
     [
       chart_date,
@@ -31,12 +28,6 @@ class Sample
 
   def chart_date
     date.to_time.to_i * 1000
-  end
-
-  def to_h
-    {
-      position: @position,
-    }
   end
 
   def -(other)
