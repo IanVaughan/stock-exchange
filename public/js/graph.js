@@ -11,7 +11,7 @@ $(function () {
 
     xAxis: {
       type: 'datetime',
-      tickInterval: 3600 * 1000,
+      // tickInterval: 3600 * 1000,
     },
 
     series : [{
@@ -42,7 +42,6 @@ $(function () {
       data : $('#container').data('collections'),
       onSeries : 'dataseries',
       shape : 'squarepin',
-      width : 16
     }]
   });
 });
