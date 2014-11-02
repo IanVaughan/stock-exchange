@@ -21,8 +21,10 @@ class Sample
   def to_chart
     [
       chart_date,
+      px_open,
       px_high,
-      px_low
+      px_low,
+      px_last
     ]
   end
 

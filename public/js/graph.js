@@ -34,6 +34,10 @@ $(function () {
       name : '50 Day',
       data :  $('#container').data('avg50d'),
     }, {
+      name : 'OHLC',
+      type : 'ohlc',
+      data :  $('#container').data('ohlc'),
+    }, {
       type : 'flags',
       data : $('#container').data('collections'),
       onSeries : 'dataseries',

@@ -26,6 +26,8 @@ class App < Sinatra::Application
     ww = (params['window_width'] || 40).to_i
     gua = (params['give_up_after'] || 50).to_i
     cc = 3
+    ohlc_selected = params['ohlc_select'] || false
+    seperate_lines = params['others_select'] || false
 
     erb :graph, locals: {
       window_width: ww,
@@ -36,7 +38,9 @@ class App < Sinatra::Application
       low: points.map {|p| [p.chart_date, p.px_low] },
       avg20d: points.map {|p| [p.chart_date, p.mov_avg_20d] },
       avg50d: points.map {|p| [p.chart_date, p.mov_avg_50d] },
-      collections: collections(points, ww, gua, cc)
+      collections: collections(points, ww, gua, cc),
+      ohlc: ohlc_selected ? points.map(&:to_chart) : nil,
+      seperate_lines: seperate_lines
     }
   end
 end

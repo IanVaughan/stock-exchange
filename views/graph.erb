@@ -9,18 +9,29 @@
          name="give_up_after"
          type="text"
          value="<%= give_up_after %>"/>
+  <input title="OHLC"
+         name="ohlc_select"
+         type="checkbox"
+         <%= ohlc.nil? ? '' : 'checked' %>>
+  <input title="Seperate"
+         name="others_select"
+         type="checkbox"
+         <%= seperate_lines ? 'checked' : '' %>>
   <input type="submit" value="Submit" />
 </form>
 
 <div  id="container"
       style="height: 400px; min-width: 600px"
+      <% if seperate_lines %>
       data-high=<%= high.to_json %>
       data-open=<%= open.to_json %>
       data-close=<%= close.to_json %>
       data-low=<%= low.to_json %>
+      <% end %>
       data-avg20d=<%= avg20d.to_json %>
       data-avg50d=<%= avg50d.to_json %>
       data-collections=<%= collections.to_json %>
+      data-ohlc=<%= ohlc.to_json %>
     >
   Loading...
 </div>
