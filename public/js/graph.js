@@ -15,13 +15,24 @@ $(function () {
     },
 
     series : [{
-      name : 'SE5E',
-      pointInterval:  3600 * 1000,
-      data : $('#container').data('points'),
-      tooltip: {
-        valueDecimals: 1
-      },
+      name : 'high',
+      data : $('#container').data('high'),
       id : 'dataseries'
+    }, {
+      name : 'open',
+      data :  $('#container').data('open'),
+    }, {
+      name : 'close',
+      data :  $('#container').data('close'),
+    }, {
+      name : 'low',
+      data :  $('#container').data('low'),
+    }, {
+      name : '20 Day',
+      data :  $('#container').data('avg20d'),
+    }, {
+      name : '50 Day',
+      data :  $('#container').data('avg50d'),
     }, {
       type : 'flags',
       data : $('#container').data('collections'),

@@ -30,7 +30,12 @@ class App < Sinatra::Application
     erb :graph, locals: {
       window_width: ww,
       give_up_after: gua,
-      samples: points.map(&:to_chart),
+      high: points.map {|p| [p.chart_date, p.px_high] },
+      open: points.map {|p| [p.chart_date, p.px_open] },
+      close: points.map {|p| [p.chart_date, p.px_last] },
+      low: points.map {|p| [p.chart_date, p.px_low] },
+      avg20d: points.map {|p| [p.chart_date, p.mov_avg_20d] },
+      avg50d: points.map {|p| [p.chart_date, p.mov_avg_50d] },
       collections: collections(points, ww, gua, cc)
     }
   end
@@ -56,6 +61,4 @@ def collections(points, window_width, give_up_after, collection_count)
       }
     end
   end
-
-  collections.to_json
 end

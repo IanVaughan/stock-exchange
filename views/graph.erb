@@ -14,8 +14,13 @@
 
 <div  id="container"
       style="height: 400px; min-width: 600px"
-      data-points="<%= samples %>"
-      data-collections=<%= collections %>
+      data-high=<%= high.to_json %>
+      data-open=<%= open.to_json %>
+      data-close=<%= close.to_json %>
+      data-low=<%= low.to_json %>
+      data-avg20d=<%= avg20d.to_json %>
+      data-avg50d=<%= avg50d.to_json %>
+      data-collections=<%= collections.to_json %>
     >
   Loading...
 </div>
