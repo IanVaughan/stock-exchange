@@ -8,5 +8,9 @@ class Point
   def to_s
     "x:#{x}, y:#{y}"
   end
+
+  def inspect
+    to_s
+  end
 end
 
