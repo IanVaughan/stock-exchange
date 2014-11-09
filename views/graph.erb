@@ -1,5 +1,3 @@
-<script src="js/graph.js"></script>
-
 <form action="/graph" method="get">
   <input title="Window width"
          name="window_width"
@@ -20,18 +18,60 @@
   <input type="submit" value="Submit" />
 </form>
 
-<div  id="container"
-      style="height: 900px; min-width: 600px"
-      <% if seperate_lines %>
-      data-high=<%= high.to_json %>
-      data-open=<%= open.to_json %>
-      data-close=<%= close.to_json %>
-      data-low=<%= low.to_json %>
-      <% end %>
-      data-avg20d=<%= avg20d.to_json %>
-      data-avg50d=<%= avg50d.to_json %>
-      data-collections=<%= collections.to_json %>
-      data-ohlc=<%= ohlc.to_json %>
-    >
+<div id="container" style="height: 900px; min-width: 600px">
   Loading...
 </div>
+
+<script>
+$(function () {
+  $('#container').highcharts('StockChart', {
+
+    rangeSelector : {
+      selected : 4
+    },
+
+    title : {
+      text : 'Test Stock Chart'
+    },
+
+    xAxis: {
+      type: 'datetime',
+      // tickInterval: 3600 * 1000,
+    },
+
+    series : [
+    <% if seperate_lines %>
+    {
+      name : 'high',
+      data : <%= high.to_json %>,
+      id : 'dataseries'
+    }, {
+      name : 'open',
+      data : <%= open.to_json %>
+    }, {
+      name : 'close',
+      data : <%= close.to_json %>
+    }, {
+      name : 'low',
+      data : <%= low.to_json %>
+    },
+    <% end %>
+    {
+      name : '20 Day',
+      data : <%= avg20d.to_json %>
+    }, {
+      name : '50 Day',
+      data: <%= avg50d.to_json %>
+    }, {
+      name : 'OHLC',
+      type : 'ohlc',
+      data  :<%= ohlc.to_json %>
+    }, {
+      type : 'flags',
+      data : <%= collections.to_json %>,
+      onSeries : 'dataseries',
+      shape : 'squarepin',
+    }]
+  });
+});
+</script>
