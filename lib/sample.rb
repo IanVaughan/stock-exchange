@@ -1,9 +1,9 @@
 class Sample
   attr_reader :date, :px_open, :px_last, :px_high, :px_low
   attr_reader :rsi_14d, :mov_avg_20d, :mov_avg_50d
-  attr_accessor :position
 
   @@count = 0
+  @@offset = 0
 
   def initialize data
     @position = @@count += 1
@@ -16,6 +16,18 @@ class Sample
 
   def self.reset_count
     @@count = 0
+  end
+
+  def position
+    @position - @@offset
+  end
+
+  def position=(p)
+    @position = p
+  end
+
+  def self.offset=(o)
+    @@offset = o
   end
 
   def to_chart

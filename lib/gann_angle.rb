@@ -20,7 +20,7 @@ class GannAngle
       # 1. Select point where the 20 period moving average crosses below the 50 period
       unless find_start_point(p)
         # 2. Find highest high within the 60 days before p1 and mark point A
-        @point_a = @points[start_point.position - days_before_startpoint]
+        @point_a = find_highest
 
         unless find_end_point(p)
           # 3. Lowest low point between p1 and p2, mark as B
@@ -66,6 +66,12 @@ class GannAngle
       @finding_end_point = false
     end
     @finding_end_point
+  end
+
+  def find_highest
+    from = start_point.position - days_before_startpoint
+    from = 0 if from <= 0
+    points[from..start_point.position].sort_by!(&:px_high).last
   end
 
   def lowest(points)
