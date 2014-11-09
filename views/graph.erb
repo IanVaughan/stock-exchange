@@ -61,11 +61,11 @@ $(function () {
       data : <%= avg20d.to_json %>
     }, {
       name : '50 Day',
-      data: <%= avg50d.to_json %>
+      data : <%= avg50d.to_json %>
     }, {
       name : 'OHLC',
       type : 'ohlc',
-      data  :<%= ohlc.to_json %>
+      data : <%= ohlc.to_json %>
     }, {
       type : 'flags',
       data : <%= collections.to_json %>,
