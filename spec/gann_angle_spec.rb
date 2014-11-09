@@ -29,10 +29,21 @@ describe GannAngle do
     it { expect(subject.point_b).to eq(data[12]) }
   end
 
-  context 'calcs stuff' do
+  describe 'calcs' do
     let(:number_of_points) { 19 }
-    it { expect(subject.alpha).to eq(0.5454545454545454) }
-    it { expect(subject.beta).to eq(0.3370909090909091) }
-    it { expect(subject.gamma).to eq(0.20836363636363633) }
+    let(:alpha) { 0.5454545454545454 }
+    let(:beta) { 0.3370909090909091 }
+    let(:gamma) { 0.20836363636363633 }
+
+    context 'calcs stuff' do
+      it { expect(subject.alpha).to eq(alpha) }
+      it { expect(subject.beta).to eq(beta) }
+      it { expect(subject.gamma).to eq(gamma) }
+    end
+
+    context 'returns stuff in an array' do
+      let(:result) { { data[1] => [alpha, beta, gamma] } }
+      it { expect(subject.angles).to eq(result) }
+    end
   end
 end
