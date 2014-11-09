@@ -2,7 +2,6 @@ require './lib/calculate'
 require './lib/csv_parser'
 require './lib/gann_angle'
 require './lib/sample'
-require './lib/trend'
 require './lib/point'
 require './lib/top_point_detection'
 require 'pry'
@@ -10,5 +9,4 @@ require 'pry'
 module Shares
   # filename = './data/sx5e_index.csv'
   # points = CsvParser.parse(filename)
-  # analiser = Analiser.new(points)
 end

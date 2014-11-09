@@ -4,7 +4,6 @@ require './lib/gann_angle'
 require './lib/point'
 require './lib/sample'
 require './lib/top_point_detection'
-require './lib/trend'
 require 'pry'
 
 def load_test_input(file = 'test.csv')
