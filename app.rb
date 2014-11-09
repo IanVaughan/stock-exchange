@@ -21,7 +21,15 @@ class App < Sinatra::Application
 
   get '/graph' do
     load_data if session[:points].nil?
-    points = session[:points]
+    all_points = session[:points]
+
+    start_point = (params['start_point'] || 0).to_i
+    end_point = (params['end_point'] || all_points.size).to_i
+    if end_point <= 0 || end_point >= all_points.size
+      end_point = all_points.size
+    end
+    points = all_points[start_point..end_point]
+    Sample.offset = start_point
 
     ww = (params['window_width'] || 40).to_i
     gua = (params['give_up_after'] || 50).to_i
@@ -35,6 +43,8 @@ class App < Sinatra::Application
       window_width: ww,
       give_up_after: gua,
       days_previous: days_previous,
+      start_point: start_point,
+      end_point: end_point,
       min_a_b_window_width: min_a_b_window_width,
       high: points.map {|p| [p.chart_date, p.px_high] },
       open: points.map {|p| [p.chart_date, p.px_open] },
