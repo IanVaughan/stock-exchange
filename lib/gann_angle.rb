@@ -36,6 +36,9 @@ class GannAngle
 
   private
 
+  BETA = 61.8 / 100.0 # %
+  GAMMA = 38.2 / 100.0 # %
+
   attr_reader :points
 
   def reset
@@ -70,8 +73,8 @@ class GannAngle
     x = point_b.position.to_f - point_a.position.to_f
 
     alpha = y / x
-    beta = (y * 0.618) / x
-    gamma = (y * 0.382) / x
+    beta = (y * BETA) / x
+    gamma = (y * GAMMA) / x
 
     [alpha, beta, gamma]
   end
