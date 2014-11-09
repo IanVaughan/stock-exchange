@@ -10,11 +10,19 @@
   <input title="OHLC"
          name="ohlc_select"
          type="checkbox"
-         <%= ohlc.nil? ? '' : 'checked' %>>
+         <%= ohlc.nil? ? '' : 'checked' %>/>
   <input title="Seperate"
          name="others_select"
          type="checkbox"
-         <%= seperate_lines ? 'checked' : '' %>>
+         <%= seperate_lines ? 'checked' : '' %>/>
+ <input title="Days Previous"
+        name="days_previous"
+        type="text"
+        value="<%= days_previous %>"/>
+ <input title="Min AB Window Width"
+        name="min_a_b_window_width"
+        type="text"
+        value="<%= min_a_b_window_width %>"/>
   <input type="submit" value="Submit" />
 </form>
 
@@ -71,7 +79,16 @@ $(function () {
       data : <%= collections.to_json %>,
       onSeries : 'dataseries',
       shape : 'squarepin',
-    }]
+    },
+    <% angles.each do |d| %>
+      <% d.each do |name, data| %>
+        {
+          name : "<%= name %>",
+          data : <%= data.to_json %>
+        },
+      <% end %>
+    <% end %>
+    ]
   });
 });
 </script>

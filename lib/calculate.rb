@@ -17,7 +17,7 @@ class Calculate
     deg * Math::PI / 180.0
   end
 
-  def self.project(start_point, steps, angle_deg)
+  def self.project(start_point, steps, angle_deg, points)
     # Tan(q) = Opposite / Adjacent
     opposite = Math::tan(to_rad(angle_deg)) * steps
 
@@ -27,7 +27,9 @@ class Calculate
 
     [].tap do |result|
       steps.times do |step|
-        result << Point.new(start_point.x + step, start_point.y + (diff * step))
+        x = points[start_point.x + step].chart_date
+        y = start_point.y + (diff * step)
+        result << [x, y]
       end
     end
   end

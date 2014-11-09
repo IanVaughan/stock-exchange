@@ -38,4 +38,8 @@ class Sample
       self.px_high - other.px_high
     )
   end
+
+  def to_point
+    Point.new(position - 1, px_high)
+  end
 end

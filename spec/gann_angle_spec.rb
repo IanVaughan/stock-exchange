@@ -41,8 +41,8 @@ describe GannAngle do
       it { expect(subject.gamma).to eq(gamma) }
     end
 
-    context 'returns stuff in an array' do
-      let(:result) { { data[1] => [alpha, beta, gamma] } }
+    context 'returns stuff in an hash' do
+      let(:result) { { data[3] => {alpha: alpha, beta: beta, gamma: gamma} } }
       it { expect(subject.angles).to eq(result) }
     end
   end

@@ -21,30 +21,25 @@ describe Calculate do
   end
 
   context '#project' do
-    let(:start_point) { Point.new(5, 5) }
-    let(:end_point) { Point.new(15, 0.8748866352592395) }
+    subject { Calculate.project(start_point, steps, angle, points) }
+
+    let(:data) { load_test_input }
+    let(:points) { data[0..steps] }
+    let(:start_point) { data[0].to_point }
 
     let(:angle) { 5 }
-    let(:length) { 10 }
-    # let(:diff) { 4.5874886635259235 }
+    let(:steps) { 3 }
 
     let(:result) do
       [
-        Point.new(5, 5.0),
-        Point.new(6, 5.087488663525924),
-        Point.new(7, 5.174977327051848),
-        Point.new(8, 5.2624659905777715),
-        Point.new(9, 5.349954654103696),
-        Point.new(10, 5.43744331762962),
-        Point.new(11, 5.524931981155544),
-        Point.new(12, 5.6124206446814675),
-        Point.new(13, 5.699909308207392),
-        Point.new(14, 5.787397971733316)
+        [data[0].chart_date, 3.0],
+        [data[1].chart_date, 3.087488663525924],
+        [data[2].chart_date, 3.174977327051848]
       ]
     end
 
     it 'creates a line from a start point and an angle' do
-      expect(Calculate.project(start_point, length, angle).to_s).to eq(result.to_s)
+      expect(subject.to_s).to eq(result.to_s)
     end
   end
 end

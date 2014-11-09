@@ -1,5 +1,5 @@
 class GannAngle
-  attr_reader :days_before_startpoint, :a_b_window
+  attr_reader :days_before_startpoint, :a_b_min_window
   attr_reader :start_point, :end_point
   attr_reader :point_a, :point_b
   attr_reader :alpha, :beta, :gamma
@@ -9,15 +9,17 @@ class GannAngle
     @points = points
   end
 
-  def run(days_before_startpoint, a_b_window)
+  def run(days_before_startpoint, a_b_min_window)
     @days_before_startpoint = days_before_startpoint
-    @a_b_window = a_b_window
+    @a_b_min_window = a_b_min_window
     @angles = {}
 
     reset
 
     points.each do |p|
+      # 1. Select point where the 20 period moving average crosses below the 50 period
       unless find_start_point(p)
+        # 2. Find highest high within the 60 days before p1 and mark point A
         @point_a = @points[start_point.position - days_before_startpoint]
 
         unless find_end_point(p)
@@ -25,12 +27,13 @@ class GannAngle
           @point_b = lowest(@points[start_point.position..end_point.position])
 
           # 4. Test that B - A > 90 days, ignore if not
-          if point_b.position - point_a.position < a_b_window
+          if point_b.position - point_a.position < a_b_min_window
             reset
           else
             # 5. Calculate price difference between A and B
             @alpha, @beta, @gamma = calc_price_diff
-            @angles[point_a] = [alpha, beta, gamma]
+            @angles[start_point] = {alpha: alpha, beta: beta, gamma: gamma}
+            reset
           end
         end
       end

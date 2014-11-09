@@ -28,10 +28,14 @@ class App < Sinatra::Application
     cc = 3
     ohlc_selected = params['ohlc_select'] || false
     seperate_lines = params['others_select'] || false
+    days_previous = (params['days_previous'] || 60).to_i
+    min_a_b_window_width = (params['min_a_b_window_width'] || 90).to_i
 
     erb :graph, locals: {
       window_width: ww,
       give_up_after: gua,
+      days_previous: days_previous,
+      min_a_b_window_width: min_a_b_window_width,
       high: points.map {|p| [p.chart_date, p.px_high] },
       open: points.map {|p| [p.chart_date, p.px_open] },
       close: points.map {|p| [p.chart_date, p.px_last] },
@@ -42,8 +46,42 @@ class App < Sinatra::Application
       ohlc: ohlc_selected ? points.map(&:to_chart) : nil,
       seperate_lines: seperate_lines,
       filename:  File.basename(filename),
+      angles: gann_data(points, days_previous, min_a_b_window_width)
     }
   end
+end
+
+def gann_data(points, days_previous, window_width, project_length = 100)
+  ga = GannAngle.new(points)
+  ga.run(days_previous, window_width)
+
+  series = []
+
+  ga.angles.each do |start_point, data_set|
+    data = {}
+
+    data['alpha'] = Calculate.project(
+      start_point.to_point,
+      project_length,
+      data_set[:alpha],
+      points)
+
+    data['beta'] = Calculate.project(
+      start_point.to_point,
+      project_length,
+      data_set[:beta],
+      points)
+
+    data['gamma'] = Calculate.project(
+      start_point.to_point,
+      project_length,
+      data_set[:gamma],
+      points)
+
+    series << data
+  end
+
+  series
 end
 
 def filename
