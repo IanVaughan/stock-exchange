@@ -3,6 +3,7 @@ class GannAngle
   attr_reader :start_point, :end_point
   attr_reader :point_a, :point_b
   attr_reader :alpha, :beta, :gamma
+  attr_reader :angles
 
   def initialize(points)
     @points = points
@@ -11,6 +12,7 @@ class GannAngle
   def run(days_before_startpoint, a_b_window)
     @days_before_startpoint = days_before_startpoint
     @a_b_window = a_b_window
+    @angles = {}
 
     reset
 
@@ -28,6 +30,7 @@ class GannAngle
           else
             # 5. Calculate price difference between A and B
             @alpha, @beta, @gamma = calc_price_diff
+            @angles[point_a] = [alpha, beta, gamma]
           end
         end
       end
