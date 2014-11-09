@@ -55,13 +55,13 @@ class App < Sinatra::Application
       collections: collections(points, ww, gua, cc),
       ohlc: ohlc_selected ? points.map(&:to_chart) : nil,
       seperate_lines: seperate_lines,
-      filename:  File.basename(filename),
+      filename: File.basename(filename),
       angles: gann_data(points, days_previous, min_a_b_window_width)
     }
   end
 end
 
-def gann_data(points, days_previous, window_width, project_length = 100)
+def gann_data(points, days_previous, window_width)
   ga = GannAngle.new(points)
   ga.run(days_previous, window_width)
 
@@ -72,19 +72,19 @@ def gann_data(points, days_previous, window_width, project_length = 100)
 
     data['alpha'] = Calculate.project(
       start_point.to_point,
-      project_length,
+      data_set[:x],
       data_set[:alpha],
       points)
 
     data['beta'] = Calculate.project(
       start_point.to_point,
-      project_length,
+      data_set[:x],
       data_set[:beta],
       points)
 
     data['gamma'] = Calculate.project(
       start_point.to_point,
-      project_length,
+      data_set[:x],
       data_set[:gamma],
       points)
 

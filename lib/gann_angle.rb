@@ -24,15 +24,15 @@ class GannAngle
 
         unless find_end_point(p)
           # 3. Lowest low point between p1 and p2, mark as B
-          @point_b = lowest(@points[start_point.position..end_point.position])
+          @point_b = lowest(points[start_point.position..end_point.position])
 
           # 4. Test that B - A > 90 days, ignore if not
           if point_b.position - point_a.position < a_b_min_window
             reset
           else
             # 5. Calculate price difference between A and B
-            @alpha, @beta, @gamma = calc_price_diff
-            @angles[start_point] = {alpha: alpha, beta: beta, gamma: gamma}
+            alpha, beta, gamma, x = calc_price_diff
+            @angles[start_point] = {alpha: alpha, beta: beta, gamma: gamma, x: x.round}
             reset
           end
         end
@@ -88,6 +88,6 @@ class GannAngle
     beta = (y * BETA) / x
     gamma = (y * GAMMA) / x
 
-    [alpha, beta, gamma]
+    [alpha, beta, gamma, x]
   end
 end
