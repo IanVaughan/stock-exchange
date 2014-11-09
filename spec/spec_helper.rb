@@ -1,4 +1,3 @@
-require './lib/analiser'
 require './lib/calculate'
 require './lib/csv_parser'
 require './lib/gann_angle'
