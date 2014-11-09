@@ -40,7 +40,8 @@ class App < Sinatra::Application
       avg50d: points.map {|p| [p.chart_date, p.mov_avg_50d] },
       collections: collections(points, ww, gua, cc),
       ohlc: ohlc_selected ? points.map(&:to_chart) : nil,
-      seperate_lines: seperate_lines
+      seperate_lines: seperate_lines,
+      filename:  File.basename(filename),
     }
   end
 end
