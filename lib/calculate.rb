@@ -22,8 +22,7 @@ class Calculate
     opposite = Math::tan(to_rad(angle_deg)) * steps
 
     end_point = Point.new(start_point.x + steps, start_point.y + opposite)
-    # diff for each step = end(high) - start(low) / steps
-    diff = (end_point.y - start_point.y) / steps
+    diff = end_point.y - start_point.y
 
     [].tap do |result|
       steps.times do |step|

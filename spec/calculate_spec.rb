@@ -33,8 +33,8 @@ describe Calculate do
     let(:result) do
       [
         [data[0].chart_date, 3.0],
-        [data[1].chart_date, 3.087488663525924],
-        [data[2].chart_date, 3.174977327051848]
+        [data[1].chart_date, 3.262465990577772],
+        [data[2].chart_date, 3.524931981155544]
       ]
     end
 
