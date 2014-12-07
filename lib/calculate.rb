@@ -21,7 +21,9 @@ class Calculate
     # Tan(q) = Opposite / Adjacent
     opposite = Math::tan(to_rad(angle_deg)) * steps
 
-    end_point = Point.new(start_point.x + steps, start_point.y + opposite)
+    end_point = Point.new(
+      start_point.x + steps,
+      start_point.y + opposite)
     diff = end_point.y - start_point.y
 
     [].tap do |result|
