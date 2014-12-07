@@ -9,7 +9,7 @@ describe GannAngle do
 
   before { subject.run(days_before_startpoint, a_b_window) }
 
-  context 'finds crossover point' do
+  context 'finds p1' do
     let(:number_of_points) { 6 }
     it { expect(subject.start_point).to eq(data[3]) }
   end
@@ -42,7 +42,7 @@ describe GannAngle do
     end
 
     context 'returns stuff in an hash' do
-      let(:result) { { data[3] => {alpha: alpha, beta: beta, gamma: gamma} } }
+      let(:result) { { data[3] => {alpha: alpha, beta: beta, gamma: gamma, x: 0} } }
       it { expect(subject.angles).to eq(result) }
     end
   end

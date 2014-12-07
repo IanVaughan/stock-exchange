@@ -31,7 +31,7 @@ class GannAngle
             reset
           else
             # 5. Calculate price difference between A and B
-            alpha, beta, gamma, x = calc_price_diff
+            @alpha, @beta, @gamma, x = calc_price_diff
             @angles[start_point] = {alpha: alpha, beta: beta, gamma: gamma, x: x.round}
             reset
           end
@@ -42,8 +42,14 @@ class GannAngle
 
   private
 
-  BETA = 61.8 / 100.0 # %
-  GAMMA = 38.2 / 100.0 # %
+  ANGLES = [
+    100.0, # Alpha (y / x)
+    61.8,  # Beta (y * 0.618) / x
+    38.2,  # Gamma (y * 0.382) / x
+    50.0,  # Mid (y * 0.5) / x
+    76.4,
+    23.6   # Low (y * 0.236) / x
+  ]
 
   attr_reader :points
 
@@ -71,7 +77,9 @@ class GannAngle
   def find_highest
     from = start_point.position - days_before_startpoint
     from = 0 if from <= 0
-    points[from..start_point.position].sort_by!(&:px_high).last
+    points[from...start_point.position].
+      sort { |p, o| [p.date, p.px_high] <=> [o.date, o.px_high] }.
+      first
   end
 
   def lowest(points)
@@ -84,10 +92,28 @@ class GannAngle
     # 6. Calculate number of trading days between A and B, call this “x”
     x = point_b.position.to_f - point_a.position.to_f
 
-    alpha = y / x
-    beta = (y * BETA) / x
-    gamma = (y * GAMMA) / x
+    res = []
 
-    [alpha, beta, gamma, x]
+    ANGLES.each do |angle|
+      res << y * (angle / 100.0) / x
+    end
+
+    res << x
+
+    if false
+      CSV.open("file.csv", "wb") do |csv|
+        points.each do |p|
+          csv << [
+            p.chart_date,
+            p.position,
+            p.mov_avg_50d,
+            p.mov_avg_20d,
+            p.px_high,
+            p.px_low]
+        end
+      end
+    end
+
+    res
   end
 end
