@@ -26,7 +26,11 @@ class Calculate
 
     [].tap do |result|
       steps.times do |step|
-        x = points[start_point.x + step].chart_date
+        if start_point.x + step < points.size
+          x = points[start_point.x + step].chart_date
+        else
+          x = points.last.chart_date
+        end
         y = start_point.y + (diff * step)
         result << [x, y]
       end
