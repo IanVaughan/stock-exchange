@@ -37,8 +37,8 @@ describe GannAngle do
     let(:mid) { 0.2727272727272727 }
     let(:low) { 0.12872727272727275 }
 
-    context 'returns stuff in an hash' do
-      let(:result) { { data[3] => {alpha: alpha, beta: beta, gamma: gamma, mid: mid, low: low, x: 11} } }
+    context 'returns angles in an hash with the key at point B' do
+      let(:result) { { data[12] => {alpha: alpha, beta: beta, gamma: gamma, mid: mid, low: low, x: 11} } }
       it { expect(subject.angles).to eq(result) }
     end
   end

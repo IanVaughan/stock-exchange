@@ -39,7 +39,7 @@ class GannAngle
             reset
           else
             # 5. Calculate price difference between A and B
-            @angles[start_point] = calc_price_diff
+            @angles[point_b] = calc_price_diff
             reset
           end
         end
