@@ -71,23 +71,13 @@ def gann_data(points, days_previous, window_width)
   ga.angles.each do |start_point, data_set|
     data = {}
 
-    data['alpha'] = Calculate.project(
-      start_point.to_point,
-      data_set[:x],
-      data_set[:alpha],
-      points)
-
-    data['beta'] = Calculate.project(
-      start_point.to_point,
-      data_set[:x],
-      data_set[:beta],
-      points)
-
-    data['gamma'] = Calculate.project(
-      start_point.to_point,
-      data_set[:x],
-      data_set[:gamma],
-      points)
+    GannAngle::ANGLES.keys.each do |name|
+      data[name.to_s] = Calculate.project(
+        start_point.to_point,
+        data_set[:x],
+        data_set[name],
+        points)
+    end
 
     series << data
   end

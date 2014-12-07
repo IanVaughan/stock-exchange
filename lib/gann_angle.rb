@@ -4,6 +4,15 @@ class GannAngle
   attr_reader :point_a, :point_b
   attr_reader :angles
 
+  ANGLES = {
+    alpha: 100.0, # (y / x)
+    beta: 61.8,  # (y * 0.618) / x
+    gamma: 38.2,  # (y * 0.382) / x
+    mid: 50.0,  # (y * 0.5) / x
+    # 76.4,
+    low: 23.6   # (y * 0.236) / x
+  }
+
   def initialize(points)
     @points = points
   end
@@ -39,15 +48,6 @@ class GannAngle
   end
 
   private
-
-  ANGLES = {
-    alpha: 100.0, # (y / x)
-    beta: 61.8,  # (y * 0.618) / x
-    gamma: 38.2,  # (y * 0.382) / x
-    mid: 50.0,  # (y * 0.5) / x
-    # 76.4,
-    low: 23.6   # (y * 0.236) / x
-  }
 
   attr_reader :points
 
