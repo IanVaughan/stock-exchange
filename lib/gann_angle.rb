@@ -2,7 +2,6 @@ class GannAngle
   attr_reader :days_before_startpoint, :a_b_min_window
   attr_reader :start_point, :end_point
   attr_reader :point_a, :point_b
-  attr_reader :alpha, :beta, :gamma
   attr_reader :angles
 
   def initialize(points)
@@ -31,8 +30,7 @@ class GannAngle
             reset
           else
             # 5. Calculate price difference between A and B
-            @alpha, @beta, @gamma, x = calc_price_diff
-            @angles[start_point] = {alpha: alpha, beta: beta, gamma: gamma, x: x.round}
+            @angles[start_point] = calc_price_diff
             reset
           end
         end
@@ -42,14 +40,14 @@ class GannAngle
 
   private
 
-  ANGLES = [
-    100.0, # Alpha (y / x)
-    61.8,  # Beta (y * 0.618) / x
-    38.2,  # Gamma (y * 0.382) / x
-    50.0,  # Mid (y * 0.5) / x
-    76.4,
-    23.6   # Low (y * 0.236) / x
-  ]
+  ANGLES = {
+    alpha: 100.0, # (y / x)
+    beta: 61.8,  # (y * 0.618) / x
+    gamma: 38.2,  # (y * 0.382) / x
+    mid: 50.0,  # (y * 0.5) / x
+    # 76.4,
+    low: 23.6   # (y * 0.236) / x
+  }
 
   attr_reader :points
 
@@ -92,28 +90,13 @@ class GannAngle
     # 6. Calculate number of trading days between A and B, call this “x”
     x = point_b.position.to_f - point_a.position.to_f
 
-    res = []
+    res = {}
 
-    ANGLES.each do |angle|
-      res << y * (angle / 100.0) / x
+    ANGLES.each do |name, angle|
+      res[name] = y * (angle / 100.0) / x
     end
 
-    res << x
-
-    if false
-      CSV.open("file.csv", "wb") do |csv|
-        points.each do |p|
-          csv << [
-            p.chart_date,
-            p.position,
-            p.mov_avg_50d,
-            p.mov_avg_20d,
-            p.px_high,
-            p.px_low]
-        end
-      end
-    end
-
+    res[:x] = x.round
     res
   end
 end

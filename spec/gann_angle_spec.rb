@@ -34,15 +34,11 @@ describe GannAngle do
     let(:alpha) { 0.5454545454545454 }
     let(:beta) { 0.3370909090909091 }
     let(:gamma) { 0.20836363636363633 }
-
-    context 'calcs stuff' do
-      it { expect(subject.alpha).to eq(alpha) }
-      it { expect(subject.beta).to eq(beta) }
-      it { expect(subject.gamma).to eq(gamma) }
-    end
+    let(:mid) { 0.2727272727272727 }
+    let(:low) { 0.12872727272727275 }
 
     context 'returns stuff in an hash' do
-      let(:result) { { data[3] => {alpha: alpha, beta: beta, gamma: gamma, x: 0} } }
+      let(:result) { { data[3] => {alpha: alpha, beta: beta, gamma: gamma, mid: mid, low: low, x: 11} } }
       it { expect(subject.angles).to eq(result) }
     end
   end
