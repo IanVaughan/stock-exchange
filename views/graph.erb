@@ -84,7 +84,7 @@ $(function () {
       data : <%= ohlc.to_json %>
     }, {
       type : 'flags',
-      data : <%= collections.to_json %>,
+      data : <%= data_labels.to_json %>,
       onSeries : 'dataseries',
       shape : 'squarepin',
     },

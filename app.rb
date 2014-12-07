@@ -46,16 +46,17 @@ class App < Sinatra::Application
       start_point: start_point,
       end_point: end_point,
       min_a_b_window_width: min_a_b_window_width,
+      seperate_lines: seperate_lines,
+      filename: File.basename(filename),
+
       high: points.map {|p| [p.chart_date, p.px_high] },
       open: points.map {|p| [p.chart_date, p.px_open] },
       close: points.map {|p| [p.chart_date, p.px_last] },
       low: points.map {|p| [p.chart_date, p.px_low] },
       avg20d: points.map {|p| [p.chart_date, p.mov_avg_20d] },
       avg50d: points.map {|p| [p.chart_date, p.mov_avg_50d] },
-      collections: collections(points, ww, gua, cc),
+      data_labels: data_labels(points, ww, gua, cc),
       ohlc: ohlc_selected ? points.map(&:to_chart) : nil,
-      seperate_lines: seperate_lines,
-      filename: File.basename(filename),
       angles: gann_data(points, days_previous, min_a_b_window_width)
     }
   end
@@ -102,11 +103,11 @@ def load_data
   session[:points] = CsvParser.parse(filename)
 end
 
-def collections(points, window_width, give_up_after, collection_count)
+def data_labels(points, window_width, give_up_after, collection_count)
   tpd = TopPointDetection.new(points)
   tpd.run(window_width, give_up_after, collection_count)
 
-  collections = tpd.collections.each_with_index.flat_map do |collection, ci|
+  tpd.collections.each_with_index.flat_map do |collection, ci|
     collection.each_with_index.map do |sample, si|
       {
         x: sample.chart_date,
