@@ -35,7 +35,7 @@ class App < Sinatra::Application
     gua = (params['give_up_after'] || 50).to_i
     cc = 3
     ohlc_selected = params['ohlc_select'] || false
-    seperate_lines = params['others_select'] || false
+    seperate_lines = params['others_select'] || true
     days_previous = (params['days_previous'] || 60).to_i
     min_a_b_window_width = (params['min_a_b_window_width'] || 90).to_i
 
