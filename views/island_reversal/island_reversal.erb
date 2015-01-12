@@ -22,8 +22,13 @@ $(function () {
       },
       {
         type : 'flags',
-        data : <%= data[:marks].to_json %>,
-        shape : 'squarepin',
+        data : <%= data[:marks][:sell].to_json %>,
+        title: 'sell'
+      },
+      {
+        type : 'flags',
+        data : <%= data[:marks][:buy].to_json %>,
+        title: 'buy'
       }
     ]
   });

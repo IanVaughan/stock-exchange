@@ -44,12 +44,20 @@ class IslandReversal
   # current high < yesterdays low
 
   def marks(points)
-    keep = []
+    sell_points = []
+    buy_points = []
+
     points.map.with_index do |p, i|
       if p[2] < points[i-1][3]
-        keep << [p[0], p[2]]
+        sell_points << [p[0], p[2]]
+      elsif p[3] > points[i-1][2]
+        buy_points << [p[0], p[2]]
       end
     end
-    keep
+
+    {
+      sell: sell_points,
+      buy: buy_points
+    }
   end
 end
