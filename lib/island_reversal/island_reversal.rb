@@ -9,9 +9,11 @@ class IslandReversal
   DATA_PATH = BASE_PATH + DATA_SET + START_DATE + END_DATE + AUTH
 
   def render
+    d = data_points(data['data'])
     {
       name: data['name'],
-      data: data_points(data['data']),
+      data: d,
+      marks: marks(d)
     }
   end
 
@@ -26,13 +28,28 @@ class IslandReversal
   def data_points(points)
     points.map do |p|
       [
-        convert_to_date(p[0]).to_time.to_i * 1000,
+        convert_date(p[0]),
         p[1..4]
       ].flatten
     end.sort
   end
 
-  def convert_to_date(p)
-    Date.strptime(p, "%Y-%m-%d")
+  def convert_date(p)
+    Date.strptime(p, "%Y-%m-%d").to_time.to_i * 1000
+  end
+
+  # sell signals
+  # 10 > 20
+  # 10 minus 5 days) > 20 (5 days ago)
+  # current high < yesterdays low
+
+  def marks(points)
+    keep = []
+    points.map.with_index do |p, i|
+      if p[2] < points[i-1][3]
+        keep << [p[0], p[2]]
+      end
+    end
+    keep
   end
 end

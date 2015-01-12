@@ -17,8 +17,13 @@ $(function () {
     series : [
       {
         name : "<%= data[:name] %>",
-        type: 'candlestick',
+        type : 'candlestick',
         data : <%= data[:data].to_json %>,
+      },
+      {
+        type : 'flags',
+        data : <%= data[:marks].to_json %>,
+        shape : 'squarepin',
       }
     ]
   });
