@@ -60,6 +60,11 @@ class App < Sinatra::Application
       angles: gann_data(points, days_previous, min_a_b_window_width)
     }
   end
+
+  get '/islandreversal' do
+    data = IslandReversal.new.render
+    erb :'island_reversal/island_reversal', locals: { data: data }
+  end
 end
 
 def gann_data(points, days_previous, window_width)
