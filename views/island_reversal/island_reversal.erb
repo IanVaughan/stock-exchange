@@ -1,0 +1,26 @@
+<div id="container" style="height: 900px; min-width: 600px">
+  Loading...
+</div>
+
+<script>
+$(function () {
+  $('#container').highcharts('StockChart', {
+
+    title : {
+      text : "<%= data[:name] %>"
+    },
+
+    xAxis: {
+      type: 'datetime',
+    },
+
+    series : [
+      {
+        name : "<%= data[:name] %>",
+        type: 'candlestick',
+        data : <%= data[:data].to_json %>,
+      }
+    ]
+  });
+});
+</script>
